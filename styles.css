@@ -1164,6 +1164,24 @@ video {
   color: var(--fg);
 }
 
+.credits__group {
+  margin-top: 10px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.credits__group-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-soft);
+}
+
 @media (max-width: 768px) {
   .credits {
     grid-template-columns: 1fr;
