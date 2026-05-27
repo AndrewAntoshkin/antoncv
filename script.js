@@ -301,16 +301,71 @@
       });
     });
 
-  /* ---------- Sound-on toggle (visual state only) ---------- */
+  /* ---------- Sound-on toggle ---------- */
   const soundOn = document.getElementById('soundOn');
+  const isSoundMuted = () => soundOn?.classList.contains('is-muted') ?? false;
+
+  const syncSoundLabel = () => {
+    if (!soundOn) return;
+    const muted = isSoundMuted();
+    soundOn.setAttribute('aria-pressed', String(!muted));
+    soundOn.querySelector('.sound-on__label').textContent = muted
+      ? 'SOUND OFF'
+      : 'SOUND ON';
+  };
+
   if (soundOn) {
     soundOn.addEventListener('click', () => {
-      const muted = soundOn.classList.toggle('is-muted');
-      soundOn.setAttribute('aria-pressed', String(!muted));
-      soundOn.querySelector('.sound-on__label').textContent = muted
-        ? 'SOUND OFF'
-        : 'SOUND ON';
+      soundOn.classList.toggle('is-muted');
+      syncSoundLabel();
+      const filmVideo = document.getElementById('filmModalVideo');
+      if (filmVideo) filmVideo.muted = isSoundMuted();
     });
+  }
+
+  /* ---------- Watch film modal ---------- */
+  const watchFilm = document.getElementById('watchFilm');
+  const filmModal = document.getElementById('filmModal');
+  const filmModalVideo = document.getElementById('filmModalVideo');
+  const filmModalClose = document.getElementById('filmModalClose');
+  const filmModalBackdrop = document.getElementById('filmModalBackdrop');
+
+  const closeFilmModal = () => {
+    if (!filmModal || !filmModalVideo) return;
+    filmModal.classList.remove('is-open');
+    filmModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+    filmModalVideo.pause();
+    filmModalVideo.currentTime = 0;
+    lenis.start();
+  };
+
+  const openFilmModal = () => {
+    if (!filmModal || !filmModalVideo) return;
+    filmModalVideo.muted = isSoundMuted();
+    filmModal.classList.add('is-open');
+    filmModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+    lenis.stop();
+    const playPromise = filmModalVideo.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+  };
+
+  if (watchFilm && filmModal && filmModalVideo) {
+    watchFilm.addEventListener('click', openFilmModal);
+
+    filmModalClose?.addEventListener('click', closeFilmModal);
+    filmModalBackdrop?.addEventListener('click', closeFilmModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && filmModal.classList.contains('is-open')) {
+        closeFilmModal();
+      }
+    });
+
+    filmModalVideo.addEventListener('ended', closeFilmModal);
   }
 
   /* ---------- Refresh ScrollTrigger after fonts load ---------- */

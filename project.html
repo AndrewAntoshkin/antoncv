@@ -99,7 +99,7 @@
       <div class="project-feature__inner">
         <figure class="project-feature__media">
           <img src="assets/images/project-01.jpg" alt="Ocean State — main film still" />
-          <button class="project-feature__play" aria-label="Play film">
+          <button class="project-feature__play" id="watchFilm" type="button" aria-label="Play film">
             <span class="project-feature__play-icon" aria-hidden="true">▶</span>
             <span class="project-feature__play-label">Watch film</span>
           </button>
@@ -287,6 +287,21 @@
       </div>
     </div>
   </footer>
+
+  <div class="film-modal" id="filmModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ocean State film">
+    <button type="button" class="film-modal__close" id="filmModalClose" aria-label="Close film">Close</button>
+    <div class="film-modal__backdrop" id="filmModalBackdrop" aria-hidden="true"></div>
+    <div class="film-modal__inner">
+      <video
+        class="film-modal__video"
+        id="filmModalVideo"
+        src="assets/videos/ocean-state.mp4"
+        playsinline
+        controls
+        preload="metadata"
+      ></video>
+    </div>
+  </div>
 
   <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
